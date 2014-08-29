@@ -2,7 +2,7 @@ package com.fit2cloud.sdk;
 
 public enum CloudTypes {
 
-	aliyun("aliyun"), aws("aws"), qingyun("qingyun"), ucloud("ucloud");
+	aliyun("aliyun"), aws("aws"), qingcloud("qingcloud"), ucloud("ucloud");
 
 	private String name;
 
