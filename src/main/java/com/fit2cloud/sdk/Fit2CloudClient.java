@@ -29,7 +29,7 @@ public class Fit2CloudClient {
 		if(restApiUrl != null && restApiUrl.endsWith("/")) {
 			restApiUrl = restApiUrl.substring(0, restApiUrl.length()-1);
 		}
-		restApiEndpoint = String.format("%s/rest", restApiUrl);
+		restApiEndpoint = restApiUrl;
 		executeScriptInServerUrl = String.format("%s/executescript/server", restApiEndpoint);
 		getLoggingUrl = String.format("%s/event/loggings/", restApiEndpoint);
 		service = new ServiceBuilder().provider(Fit2CloudApi.class).apiKey(consumerKey).apiSecret(secret).build();

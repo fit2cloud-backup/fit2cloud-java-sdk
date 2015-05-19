@@ -38,7 +38,8 @@ http://repository.fit2cloud.com/content/repositories/fit2cloud-public/com/fit2cl
 ```java
 		String apiKey = "你的consumer key";
 		String apiSecret = "你的secret key";
-		Fit2CloudClient client = new Fit2CloudClient(apiKey, apiSecret, CloudTypes.aliyun);
+		String restApiEndpoint = "你的restApiEndpoint";
+		Fit2CloudClient client = new Fit2CloudClient(apiKey, apiSecret, restApiEndpoint);
 		System.out.println("List clusters.....");
 		System.out.println(client.getClusters());
 ```
@@ -48,5 +49,8 @@ API列表：
 2. 获取单个集群的信息
 3. 获取集群下面的虚机组列表
 4. 获取集群下面的虚机列表
-5. 在指定虚机中执行脚本
-6. 获取脚本执行日志
+5. 获取集群下特定虚机组下的虚机类表
+6. 在指定集群的特定虚机组下启动虚机
+7. 关闭指定的虚机
+8. 在指定虚机中执行脚本
+9. 获取脚本执行日志
