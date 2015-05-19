@@ -16,13 +16,14 @@ public class Fit2CloudClientTest {
 	
 	private String apiKey;
 	private String apiSecret;
+	private String restApiUrl;
 	private Fit2CloudClient client;
 
 	@Before
 	public void setUp() throws Exception {
 		this.apiKey = "Your Consumer Key";
 		this.apiSecret = "Your Secrey Key";
-		this.client = new Fit2CloudClient(apiKey, apiSecret, CloudTypes.aws);
+		this.client = new Fit2CloudClient(apiKey, apiSecret, restApiUrl);
 	}
 
 	@After
@@ -76,6 +77,30 @@ public class Fit2CloudClientTest {
 		long eventId = 306;
 		List<Logging> loggings = client.getLoggingsByEventId(eventId);
 		System.out.println(loggings);
+	}
+	
+	@Test
+	public void testLaunchServer() throws Exception {
+		try {
+			long clusterId = 1;
+			long clusterRoleId = 2; 
+			long serverId = client.launchServer(clusterId, clusterRoleId);
+			System.out.println(serverId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void testTerminateServer() throws Exception {
+		try {
+			long clusterId = 1;
+			long clusterRoleId = 2; 
+			long serverId = 3;
+			boolean result = client.terminateServer(clusterId, clusterRoleId, serverId);
+			System.out.println(result);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 }

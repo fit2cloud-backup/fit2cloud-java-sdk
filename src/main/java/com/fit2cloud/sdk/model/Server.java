@@ -33,6 +33,7 @@ public class Server {
 	private double price;
 	private String failedCause;
 	private boolean terminateFlag;
+	private String runningTime;
 	
 	public Long getId() {
 		return id;
@@ -207,6 +208,12 @@ public class Server {
 	}
 	public void setTerminateFlag(boolean terminateFlag) {
 		this.terminateFlag = terminateFlag;
+	}
+	public String getRunningTime() {
+		return runningTime;
+	}
+	public void setRunningTime(String runningTime) {
+		this.runningTime = runningTime;
 	}
 	@Override
 	public String toString() {

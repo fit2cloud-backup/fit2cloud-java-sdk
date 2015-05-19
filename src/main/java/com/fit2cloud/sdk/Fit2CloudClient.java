@@ -25,8 +25,11 @@ public class Fit2CloudClient {
 	private String executeScriptInServerUrl;
 	private String getLoggingUrl;
 	
-	public Fit2CloudClient(String consumerKey, String secret, CloudTypes cloudType){
-		restApiEndpoint = String.format("https://%s.fit2cloud.com:8443/rest", cloudType.getName());
+	public Fit2CloudClient(String consumerKey, String secret, String restApiUrl){
+		if(restApiUrl != null && restApiUrl.endsWith("/")) {
+			restApiUrl = restApiUrl.substring(0, restApiUrl.length()-1);
+		}
+		restApiEndpoint = String.format("%s/rest", restApiUrl);
 		executeScriptInServerUrl = String.format("%s/executescript/server", restApiEndpoint);
 		getLoggingUrl = String.format("%s/event/loggings/", restApiEndpoint);
 		service = new ServiceBuilder().provider(Fit2CloudApi.class).apiKey(consumerKey).apiSecret(secret).build();
@@ -91,6 +94,21 @@ public class Fit2CloudClient {
 		}
 	}
 	
+	public List<Server> getClusterServers(long clusterId, long clusterRoleId) throws Fit2CloudException {
+		OAuthRequest request = new OAuthRequest(Verb.GET, restApiEndpoint +  "/cluster/"+clusterId+"/clusterrole/"+clusterRoleId+"/servers");
+		Token accessToken = new Token("", "");
+		service.signRequest(accessToken, request);
+		Response response = request.send();
+		int code = response.getCode();
+		String responseString = response.getBody();
+		if (code==200){
+			Type listType = new TypeToken<ArrayList<Server>>() {}.getType();
+			return new GsonBuilder().create().fromJson(responseString, listType);
+		}else{
+			throw new Fit2CloudException(responseString);
+		}
+	}
+	
 	public long executeScript(long serverId, String scriptContent)
 			throws Fit2CloudException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, executeScriptInServerUrl);
@@ -122,6 +140,33 @@ public class Fit2CloudClient {
 			return new GsonBuilder().create().fromJson(responseString, listType);
 		}else{
 			throw new Fit2CloudException(responseString);
+		}
+	}
+	
+	public Long launchServer(long clusterId, long clusterRoleId) throws Fit2CloudException{
+		OAuthRequest request = new OAuthRequest(Verb.POST, restApiEndpoint +  "/launchserver/cluster/"+clusterId+"/clusterrole/"+clusterRoleId);
+		Token accessToken = new Token("", "");
+		service.signRequest(accessToken, request);
+		Response response = request.send();
+		int code = response.getCode();
+		String responseString = response.getBody();
+		if (code==200){
+			return Long.parseLong(responseString);
+		}else{
+			throw new Fit2CloudException(responseString);
+		}
+	}
+	public boolean terminateServer(long clusterId, long clusterRoleId, long serverId) throws Fit2CloudException{
+		OAuthRequest request = new OAuthRequest(Verb.POST, restApiEndpoint +  "/terminateserver/cluster/"+clusterId+"/clusterrole/"+clusterRoleId+"/server/"+serverId);
+		Token accessToken = new Token("", "");
+		service.signRequest(accessToken, request);
+		Response response = request.send();
+		int code = response.getCode();
+		String responseString = response.getBody();
+		if (code==200){
+			return "true".equals(responseString);
+		}else{
+			throw new Fit2CloudException(response.getBody());
 		}
 	}
 		
